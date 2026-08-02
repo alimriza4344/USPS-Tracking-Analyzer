@@ -1,0 +1,1 @@
+Place a company logo file here named "logo.png" (recommended size: 64x64 or 128x128, transparent background) to customize the sidebar branding. The app currently displays a placeholder package emoji if no logo is present.
