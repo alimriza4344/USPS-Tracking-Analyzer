@@ -1,7 +1,7 @@
 """
 exporter.py
-Writes the final Scanned.xlsx, No_Scan.xlsx, Failed.xlsx, and
-Summary_Report.xlsx output files.
+Writes the final Scanned.xlsx, No_Scan.xlsx, Failed.xlsx, Summary_Report.xlsx,
+and Remaining_Tracking.xlsx output files.
 """
 
 from __future__ import annotations
@@ -55,14 +55,17 @@ class ResultExporter:
         else:
             self.failed.append(result)
 
-    def export_all(self, summary: RunSummary) -> dict:
-        """Write all four output files and return their paths."""
+    def export_all(self, summary: RunSummary, remaining_numbers: List[str] = None) -> dict:
+        """Write all output files and return their paths."""
         paths = {
             "scanned": self._export_scanned(),
             "no_scan": self._export_no_scan(),
             "failed": self._export_failed(),
             "summary": self._export_summary(summary),
         }
+        if remaining_numbers:
+            paths["remaining"] = self._export_remaining(remaining_numbers)
+
         logger.info("Exported results to %s", self.output_dir)
         return paths
 
@@ -122,5 +125,11 @@ class ResultExporter:
             {"Metric": "Success Rate", "Value": f"{summary.success_rate}%"},
         ]
         df = pd.DataFrame(rows)
+        df.to_excel(path, index=False)
+        return path
+
+    def _export_remaining(self, remaining_numbers: List[str]) -> Path:
+        path = self.output_dir / "Remaining_Tracking.xlsx"
+        df = pd.DataFrame(remaining_numbers, columns=["Tracking Number"])
         df.to_excel(path, index=False)
         return path

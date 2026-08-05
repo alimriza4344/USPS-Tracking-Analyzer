@@ -6,9 +6,23 @@ Shared utility/helper functions used across the USPS Tracking Analyzer.
 from __future__ import annotations
 
 import re
+import sys
 import time
 from datetime import datetime
+from pathlib import Path
 from typing import Optional
+
+
+def get_resource_path(relative_path: str) -> Path:
+    """Get absolute path to resource, works for dev and for PyInstaller."""
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = Path(sys._MEIPASS)
+    except Exception:
+        base_path = Path(__file__).parent
+        # If we are in utils.py, parent is project root
+
+    return base_path / relative_path
 
 
 # USPS tracking numbers come in several formats. This regex covers the most

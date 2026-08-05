@@ -8,9 +8,17 @@ Run with:
 
 from __future__ import annotations
 
+import os
 import sys
+from pathlib import Path
 
 from logger import get_logger
+
+# Fix for PyInstaller + Playwright:
+# Force Playwright to look for browsers in the standard %USERPROFILE%\AppData\Local\ms-playwright
+# instead of the temporary extraction folder (_MEIxxx) created by the EXE.
+if getattr(sys, 'frozen', False):
+    os.environ["PLAYWRIGHT_BROWSERS_PATH"] = str(Path.home() / "AppData" / "Local" / "ms-playwright")
 
 logger = get_logger(__name__)
 

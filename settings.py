@@ -32,6 +32,8 @@ class Settings:
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
         "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
     )
+    proxy_enabled: bool = False
+    proxy_server: str = ""             # e.g., http://user:pass@host:port
 
     def to_dict(self) -> Dict[str, Any]:
         return asdict(self)
